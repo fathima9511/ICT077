@@ -1,0 +1,112 @@
+
+1)Basic Commands
+
+sudo apt-get update 
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+sudo usermod -aG "username"
+docker version
+docker pull httpd
+docker images
+docker run -p 80:80 httpd
+docker ps 
+docker stop container_id
+docker ps -a
+docker rm container_id
+docker images
+docker rmi image_id
+
+.....
+2)docker exec -it image_id bash
+docker run --it --rm --name <anyName> python:latest python
+docker network create --subnet=192.168.6.0/23 mynetwork
+docker network ls
+--restart on-failure
+sudo service docker restart
+
+...
+3)DockerFile
+......
+FROM ubuntu
+MAINTAINER ict002
+RUN apt-get update
+RUN apt-get install -y nginx
+ADD index.html /var/www/html.nginx-debian.html
+COPY ./var/www/html/ict077.html
+ENTRYPOINT ["/usr/sbin/nginx" , "-g" , "daemon-off;"]
+EXPOSE 8080
+.....
+
+FROM centos:7
+MAINTAINER ict002
+RUN yum -y install httpd
+EXPOSE 80
+CMD ["/usr/sbin/httpd", "-D", "FOREGROUND"]
+
+index.html
+.....
+
+<html>
+<h1>Hello-docker</h1>
+</html
+
+--docker build -t nginx:latest . --
+--docker run -d -p 8080:80 nginx--
+--localhost:8080 --
+
+...
+
+RUN PYTHON
+
+DockerFile
+
+FROM python
+WORKDIR /app
+COPY python.py ./
+CMD ["python", "python.py"]
+
+..
+Python.py
+
+print("Hello")
+
+--python3 python.py
+.....
+
+
+4)docker-compose.yml
+....
+
+version: '3'
+
+services:
+  wordpress:
+    image: wordpress
+    ports:
+      - "8000:80"
+    depends_on:
+      - db
+    volumes:
+      - wordpress:/var/www/html
+    environment:
+       WORDPRESS_DB_HOST:  db:3306
+       WORDPRESS_DB_USER:  wordpress
+       WORDPRESS_DB_PASSWORD:  wordpress
+    restart: always
+    
+  db:
+    image:  mysql
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD:  wordpress
+      MYSQL_DATABASE:  wordpress
+      MYSQL_USER:  wordpress
+      MYSQL_PASSWORD:  wordpress
+    restart: always
+    
+volumes:
+  wordpress:
+  db:
+  
+  --docker-compose up--
+  --localhost:8000/--
